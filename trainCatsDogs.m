@@ -29,7 +29,10 @@ labels = [catTrainLabels;dogTrainLabels];
 testLabels = [catTestLabels;dogTestLabels];
 
 %% Fit SVM
-Mdl = fitcsvm(data,labels,'KernelFunction','RBF');
+svmModel = fitcsvm(data,labels,'KernelFunction','RBF');
 
 %% Test predictor
-testingAcc = mean(Mdl.predict(testData)==testLabels);
+testingAcc = mean(svmModel.predict(testData)==testLabels);
+
+%% Save model and testing accuracy
+save('svmModel','testingAcc','svmModel')
