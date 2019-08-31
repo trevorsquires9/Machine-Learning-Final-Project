@@ -10,22 +10,22 @@ catTestInd = randi(length(catData),testSamples,1);
 catTrainInd = setdiff(1:length(catData),catTestInd);
 
 catTestData = catData(catTestInd,:);
-catTrainData = catData(catTrainInd,:);
+catData = catData(catTrainInd,:);
 catTestLabels = catLabels(catTestInd);
-catTrainLabels = catLabels(catTrainInd);
+catLabels = catLabels(catTrainInd);
 
 
-dogTestInd = randi(length(dogData),testSamples,1);
-dogTrainInd = setdiff(1:length(dogData),dogTestInd);
+dogTestInd = randi(length(dogTrainData),testSamples,1);
+dogTrainInd = setdiff(1:length(dogTrainData),dogTestInd);
 
-dogTestData = dogData(dogTestInd,:);
-dogTrainData = dogData(dogTrainInd,:);
-dogTestLabels = dogLabels(dogTestInd);
-dogTrainLabels = dogLabels(dogTrainInd);
+dogTestData = dogTrainData(dogTestInd,:);
+dogTrainData = dogTrainData(dogTrainInd,:);
+dogTestLabels = dogTrainLabels(dogTestInd);
+dogTrainLabels = dogTrainLabels(dogTrainInd);
 
-data = [catTrainData;dogTrainData];
+data = [catData;dogTrainData];
 testData = [catTestData;dogTestData];
-labels = [catTrainLabels;dogTrainLabels];
+labels = [catLabels;dogTrainLabels];
 testLabels = [catTestLabels;dogTestLabels];
 
 %% Fit SVM

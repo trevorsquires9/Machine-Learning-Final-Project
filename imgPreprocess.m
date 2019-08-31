@@ -18,9 +18,9 @@ for i = 1:numData
         tmp = reshape(tmp,[m*n,3]);
         
         catData(i,1,:) = mean(tmp);
-        catData(i,1,:) = median(tmp);
-        catData(i,1,:) = std(tmp);
-        catData(i,1,:) = skewness(tmp);
+        catData(i,2,:) = median(tmp);
+        catData(i,3,:) = std(tmp);
+        catData(i,4,:) = skewness(tmp);
     catch
         bad = [bad i];
     end
@@ -38,9 +38,9 @@ for i = 1:numData
         tmp = reshape(tmp,[m*n,3]);
         
         dogData(i,1,:) = mean(tmp);
-        dogData(i,1,:) = median(tmp);
-        dogData(i,1,:) = std(tmp);
-        dogData(i,1,:) = skewness(tmp);
+        dogData(i,2,:) = median(tmp);
+        dogData(i,3,:) = std(tmp);
+        dogData(i,4,:) = skewness(tmp);
     catch
         bad = [bad i];
     end
