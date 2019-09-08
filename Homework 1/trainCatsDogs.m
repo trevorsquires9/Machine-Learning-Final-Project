@@ -2,7 +2,7 @@ clear
 clc
 close all;
 
-%% Load data and combine
+%% Load data, split into testing and training data, then combine
 load('goodData')
 testSamples=1000;
 
@@ -13,7 +13,6 @@ catTestData = catData(catTestInd,:);
 catTrainData = catData(catTrainInd,:);
 catTestLabels = catLabels(catTestInd);
 catTrainLabels = catLabels(catTrainInd);
-
 
 dogTestInd = randi(length(dogData),testSamples,1);
 dogTrainInd = setdiff(1:length(dogData),dogTestInd);

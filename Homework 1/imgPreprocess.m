@@ -7,7 +7,7 @@ numData = 12499;
 catData = zeros(numData,4,3);
 dogData = zeros(numData,4,3);
 
-%% Load Imagery and save
+%% Load Imagery
 %% Cat
 bad = [];
 for i = 1:numData
@@ -17,12 +17,13 @@ for i = 1:numData
         [m,n,~] = size(tmp);
         tmp = reshape(tmp,[m*n,3]);
         
+        % Reduce imagery into a 4x1x3 vector for simplicity (not good)
         catData(i,1,:) = mean(tmp);
         catData(i,2,:) = median(tmp);
         catData(i,3,:) = std(tmp);
         catData(i,4,:) = skewness(tmp);
     catch
-        bad = [bad i];
+        bad = [bad i]; % god someone please fix this
     end
 end
 catData(bad,:,:) = [];
