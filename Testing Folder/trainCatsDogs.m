@@ -2,36 +2,39 @@ clear
 clc
 close all;
 
-%% Load data, split into testing and training data, then combine
-load('goodData')
-testSamples=1000;
+imds = imageDatastore('../Homework 1/PetImages', ...
+    'IncludeSubfolders',true, ...
+    'LabelSource','foldernames');
+[imdsTrain,imdsValidation] = splitEachLabel(imds,0.7,'randomized');
+net = alexnet;
 
-catTestInd = randi(length(catData),testSamples,1);
-catTrainInd = setdiff(1:length(catData),catTestInd);
+inputSize = net.Layers(1).InputSize;
+layersTransfer = net.Layers(1:end-3);
 
-catTestData = catData(catTestInd,:);
-catTrainData = catData(catTrainInd,:);
-catTestLabels = catLabels(catTestInd);
-catTrainLabels = catLabels(catTrainInd);
+numClasses = numel(categories(imdsTrain.Labels));
+layers = [
+    layersTransfer
+    fullyConnectedLayer(numClasses,'WeightLearnRateFactor',20,'BiasLearnRateFactor',20)
+    softmaxLayer
+    classificationLayer];
 
-dogTestInd = randi(length(dogData),testSamples,1);
-dogTrainInd = setdiff(1:length(dogData),dogTestInd);
+pixelRange = [-30 30];
+imageAugmenter = imageDataAugmenter( ...
+    'RandXReflection',true, ...
+    'RandXTranslation',pixelRange, ...
+    'RandYTranslation',pixelRange);
+augimdsTrain = augmentedImageDatastore(inputSize(1:2),imdsTrain, ...
+    'DataAugmentation',imageAugmenter);
+augimdsValidation = augmentedImageDatastore(inputSize(1:2),imdsValidation);
 
-dogTestData = dogData(dogTestInd,:);
-dogTrainData = dogData(dogTrainInd,:);
-dogTestLabels = dogLabels(dogTestInd);
-dogTrainLabels = dogLabels(dogTrainInd);
+options = trainingOptions('sgdm', ...
+    'MiniBatchSize',10, ...
+    'MaxEpochs',6, ...
+    'InitialLearnRate',1e-4, ...
+    'Shuffle','every-epoch', ...
+    'ValidationData',augimdsValidation, ...
+    'ValidationFrequency',3, ...
+    'Verbose',false, ...
+    'Plots','training-progress');
 
-data = [catTrainData;dogTrainData];
-testData = [catTestData;dogTestData];
-labels = [catTrainLabels;dogTrainLabels];
-testLabels = [catTestLabels;dogTestLabels];
-
-%% Fit SVM
-svmModel = fitcsvm(data,labels,'KernelFunction','RBF');
-
-%% Test predictor
-testingAcc = mean(svmModel.predict(testData)==testLabels);
-
-%% Save model and testing accuracy
-save('svmModel','testingAcc','svmModel')
+netTransfer = trainNetwork(augimdsTrain,layers,options);

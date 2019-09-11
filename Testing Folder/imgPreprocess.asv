@@ -19,9 +19,7 @@ for i = 1:numData
     end
     
     try
-        A = imread(fileNameDog);
-        dim = size(A);
-        assert(dim(3) == 3)
+        imread(fileNameDog);
     catch
         delete(fileNameDog);
         fprintf('Dog %d\n',i);
