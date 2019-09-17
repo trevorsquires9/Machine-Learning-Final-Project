@@ -7,8 +7,8 @@ numData = 12499;
 
 %% Parse Imagery
 for i = 1:numData
-    fileNameCat = sprintf('../Homework 1/PetImages/Cat/%d.jpg',i);
-    fileNameDog = sprintf('../Homework 1/PetImages/Dog/%d.jpg',i);
+    fileNameCat = sprintf('PetImages/Cat/%d.jpg',i);
+    fileNameDog = sprintf('PetImages/Dog/%d.jpg',i);
     try
         A = imread(fileNameCat);
         dim = size(A);

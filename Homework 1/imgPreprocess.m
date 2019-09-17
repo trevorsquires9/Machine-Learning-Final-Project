@@ -1,56 +1,31 @@
-%% Script to read images into cell arrays
+%% Script to delete the corrupt files
 clear
 clc
 close all;
 
 numData = 12499;
-catData = zeros(numData,4,3);
-dogData = zeros(numData,4,3);
 
-%% Load Imagery
-%% Cat
-bad = [];
+%% Parse Imagery
 for i = 1:numData
-    fileName = sprintf('PetImages/Cat/%d.jpg',i);
+    fileNameCat = sprintf('PetImages/Cat/%d.jpg',i);
+    fileNameDog = sprintf('PetImages/Dog/%d.jpg',i);
     try
-        tmp = double(imread(fileName));
-        [m,n,~] = size(tmp);
-        tmp = reshape(tmp,[m*n,3]);
-        
-        % Reduce imagery into a 4x1x3 vector for simplicity (not good)
-        catData(i,1,:) = mean(tmp);
-        catData(i,2,:) = median(tmp);
-        catData(i,3,:) = std(tmp);
-        catData(i,4,:) = skewness(tmp);
+        A = imread(fileNameCat);
+        dim = size(A);
+        assert(dim(3) == 3)
     catch
-        bad = [bad i]; % god someone please fix this
+        delete(fileNameCat);
+        fprintf('Cat %d\n',i);
+    end
+    
+    try
+        A = imread(fileNameDog);
+        dim = size(A);
+        assert(dim(3) == 3)
+    catch
+        delete(fileNameDog);
+        fprintf('Dog %d\n',i);
     end
 end
-catData(bad,:,:) = [];
-catData = reshape(catData,[length(catData) 12]);
 
-%% Dog
-bad = [];
-for i = 1:numData
-    fileName = sprintf('PetImages/Dog/%d.jpg',i);
-    try
-        tmp = double(imread(fileName));
-        [m,n,~] = size(tmp);
-        tmp = reshape(tmp,[m*n,3]);
-        
-        dogData(i,1,:) = mean(tmp);
-        dogData(i,2,:) = median(tmp);
-        dogData(i,3,:) = std(tmp);
-        dogData(i,4,:) = skewness(tmp);
-    catch
-        bad = [bad i];
-    end
-end
-dogData(bad,:,:) = [];
-dogData = reshape(dogData,[length(dogData) 12]);
 
-%% Save data
-catLabels = zeros(length(catData),1);
-dogLabels = ones(length(dogData),1);
-
-save('goodData','catData','catLabels','dogData','dogLabels')
