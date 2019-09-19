@@ -43,4 +43,4 @@ YValidation = imdsValidation.Labels;
 accuracy = mean(YPred == YValidation);
 
 %% Save Results
-save('cnnResults','YPred','YValidation')
+save('cnnResults','
