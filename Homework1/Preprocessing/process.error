@@ -1,0 +1,100 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2018 The MathWorks, Inc.
+                   R2018b (9.5.0.944444) 64-bit (glnxa64)
+                              August 28, 2018
+
+ 
+To get started, type doc.
+For product information, visit www.mathworks.com.
+ 
+../PetImages/Cat/140.jpg
+../PetImages/Cat/660.jpg
+../PetImages/Cat/666.jpg
+../PetImages/Cat/850.jpg
+../PetImages/Cat/936.jpg
+../PetImages/Dog/1259.jpg
+../PetImages/Dog/1308.jpg
+../PetImages/Dog/1773.jpg
+../PetImages/Dog/1789.jpg
+../PetImages/Dog/1866.jpg
+../PetImages/Dog/2384.jpg
+../PetImages/Cat/2663.jpg
+../PetImages/Dog/2688.jpg
+../PetImages/Dog/2877.jpg
+../PetImages/Cat/2939.jpg
+../PetImages/Dog/3136.jpg
+../PetImages/Dog/3288.jpg
+../PetImages/Cat/3300.jpg
+../PetImages/Cat/3491.jpg
+../PetImages/Dog/3588.jpg
+../PetImages/Dog/3823.jpg
+[Warning: JPEG library error (8 bit), "Warning: unknown JFIF revision number
+0.00".] 
+[> In readjpg (line 11)
+  In imread/call_format_specific_reader (line 447)
+  In imread (line 440)
+  In imgPreprocess (line 26)] 
+../PetImages/Dog/4367.jpg
+../PetImages/Cat/4833.jpg
+../PetImages/Cat/5370.jpg
+../PetImages/Cat/5553.jpg
+../PetImages/Dog/5604.jpg
+../PetImages/Cat/5686.jpg
+../PetImages/Dog/5736.jpg
+../PetImages/Dog/6059.jpg
+../PetImages/Dog/6238.jpg
+../PetImages/Dog/6245.jpg
+../PetImages/Dog/6318.jpg
+../PetImages/Cat/6435.jpg
+../PetImages/Dog/6718.jpg
+../PetImages/Dog/7112.jpg
+../PetImages/Dog/7133.jpg
+../PetImages/Cat/7276.jpg
+../PetImages/Dog/7369.jpg
+../PetImages/Dog/7459.jpg
+../PetImages/Cat/7968.jpg
+../PetImages/Dog/7969.jpg
+../PetImages/Cat/7978.jpg
+../PetImages/Cat/8470.jpg
+../PetImages/Dog/8730.jpg
+../PetImages/Dog/9078.jpg
+../PetImages/Cat/9171.jpg
+../PetImages/Dog/9188.jpg
+../PetImages/Cat/9565.jpg
+../PetImages/Cat/9778.jpg
+../PetImages/Cat/10125.jpg
+../PetImages/Dog/10158.jpg
+../PetImages/Dog/10401.jpg
+../PetImages/Cat/10404.jpg
+../PetImages/Cat/10501.jpg
+../PetImages/Dog/10747.jpg
+../PetImages/Dog/10797.jpg
+../PetImages/Cat/10820.jpg
+../PetImages/Cat/11095.jpg
+../PetImages/Cat/11210.jpg
+../PetImages/Dog/11410.jpg
+../PetImages/Cat/11565.jpg
+../PetImages/Dog/11675.jpg
+../PetImages/Dog/11702.jpg
+../PetImages/Dog/11849.jpg
+../PetImages/Dog/11853.jpg
+../PetImages/Cat/11874.jpg
+../PetImages/Cat/11935.jpg
+../PetImages/Cat/12080.jpg
+ 
+ 
++------------------------------------------+ 
+| PALMETTO CLUSTER PBS RESOURCES REQUESTED | 
++------------------------------------------+ 
+ 
+mem=64gb,ncpus=16,walltime=72:00:00
+ 
+ 
++-------------------------------------+ 
+| PALMETTO CLUSTER PBS RESOURCES USED | 
++-------------------------------------+ 
+ 
+cpupercent=98,cput=00:08:26,mem=746636kb,ncpus=16,vmem=7192252kb,walltime=00:11:00
+ 
+ 
