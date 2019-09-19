@@ -12,6 +12,6 @@ module add matlab/2018b
 
 cd $PBS_O_WORKDIR
 
-taskset -c 0-$(($OMP_NUM_THREADS-1)) matlab -nodisplay -nodesktop -nosplash -r imgPreprocess
+taskset -c 0-$(($OMP_NUM_THREADS-1)) matlab -nodisplay -nodesktop -nosplash -r validateScript
 
 
