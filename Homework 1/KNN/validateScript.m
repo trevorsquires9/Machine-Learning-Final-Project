@@ -2,12 +2,14 @@ clear
 clc 
 close all;
 
+rng(15)
+
 imds = imageDatastore('../ProcessedImages','IncludeSubfolders',true,'LabelSource','foldernames');
 nImg = length(imds.Files);
-trials = 10;
+trials = 20;
 n = 15;
 ind = randi(nImg,trials,1);
-count = 0;
+confusionMat = zeros(2);
 
 for i=1:trials
     A = readimage(imds,ind(i));
@@ -26,9 +28,7 @@ for i=1:trials
         end
     end
     pred = round(mean(imds.Labels(bestInd) == imds.Labels(ind(i))));
-    if pred
-        count = count + 1;
-    end
+    confusionMat(imds.Labels(ind(i)),pred+1) = confusionMat(imds.Labels(ind(i)),pred+1)+1;
+
 end
 
-accuracy = count/trials;
