@@ -2,13 +2,21 @@ clear
 clc
 close all;
 
-imds = imageDatastore('../ProcessedImages', ...
-    'IncludeSubfolders',true, ...
-    'LabelSource','foldernames');
-[imdsTrain,imdsValidation] = splitEachLabel(imds,0.7,'randomized');
-
 load 'cnnResults'
 
-[YPred,scores] = classify(netTransfer,augimdsValidation);
-YValidation = imdsValidation.Labels;
 accuracy = mean(YPred == YValidation);
+confusionMat = zeros(2);
+
+for i = 1:length(YValidation)
+    if YValidation(i) == 'Cat'
+        k = 1;
+    else
+        k = 2;
+    end
+    if YPred(i) == 'Cat'
+        j = 1;
+    else
+        j = 2;
+    end
+    confusionMat(j,k) = confusionMat(j,k)+1;
+end

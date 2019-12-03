@@ -1,4 +1,4 @@
-clear
+clearclear
 clc 
 close all;
 
@@ -10,6 +10,7 @@ trials = 2500;
 n = 15;
 ind = randi(nImg,trials,1);
 confusionMat = zeros(2);
+
 
 for i=1:trials
     A = readimage(imds,ind(i));
@@ -31,4 +32,4 @@ for i=1:trials
     confusionMat(imds.Labels(ind(i)),pred+1) = confusionMat(imds.Labels(ind(i)),pred+1)+1;
 
 end
-save('knnResults')
+save('knnResults','confusionMat')
