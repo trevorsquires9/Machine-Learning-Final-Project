@@ -17,53 +17,45 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-clear
-clc
-close all;
-
+function [conRef,beck,sgd] = solvingTRS(dim,conParam,beckParam,sgdParam)
 %% Problem setting
-rng(100)
-dim = 35;
 
-eigVal = randi(10,dim,1);
-negEigValInd = randi(dim,floor(dim/2),1);
-eigVal(negEigValInd) = -eigVal(negEigValInd);
-eigMin = min(eigVal);
-[eigVec,~] = qr(randn(dim));
-A = eigVec'*diag(eigVal)*eigVec;
+% Matrix/Vector Generation
+A = rand(dim);
+A = A+A';
+b = zeros(dim,1);%randn(dim,1);
 
-b = randn(dim,1);
-
-f = @(x) 0.5*x'*A*x + b'*x;
-gradf = @(x) A*x+b;
+% Instance parameters
+eigMin = min(eig(A));
 L = norm(A,2);
 
-
-%% TRS via convex reformulation
+% Function Setup
+f = @(x) 0.5*x'*A*x + b'*x;
+gradf = @(x) A*x+b;
 g = @(x) f(x) - 0.5*eigMin*norm(x,2)^2;
 gradg = @(x) gradf(x) + eigMin*x;
 
-maxIt = 100;
-x = zeros(dim,maxIt+1);
-objVal = zeros(maxIt+1,1);
+
+%% TRS via convex reformulation
+maxIt = defaultField(conParam,'maxIt',100);
+x = zeros(dim,maxIt);
+objVal = zeros(maxIt,1);
 
 x(:,1) = randn(dim,1);
 x(:,1) = x(:,1)/norm(x(:,1),2);
 
-for i = 2:maxIt+1
+for i = 2:maxIt
     x(:,i) = x(:,i-1) - 1/(L+eigMin)*gradg(x(:,i-1));
     tmp = norm(x(:,i));
     if tmp > 1
         x(:,i) = x(:,i)/tmp;
     end
-    objVal(i) = g(x(:,i));
+    objVal(i) = f(x(:,i));
 end
 solu = x(:,end);
 
-% Map solution to equivalent one with norm  = 1
-%can't figure out how to do this
-
-% Minimizer is the same as the original problem, but objective value is not
+% Minimizer is the same as the original problem, but objective value is
+% not. Need to use different objective function for comparions.
 optVal = f(solu);
 
 % Store useful variables in a structure
@@ -75,17 +67,17 @@ conRef.solu = solu;
 conRef.optVal = optVal;
 
 %% TRS via Beck paper
-maxIt = 100;
-x = zeros(dim,maxIt+1);
-y = zeros(dim,maxIt+1);
-objValX = zeros(maxIt+1,1);
-objValY = zeros(maxIt+1,1);
-
+maxIt = defaultField(beckParam,'maxIt',100);
+x = zeros(dim,maxIt);
+y = zeros(dim,maxIt);
+objValX = zeros(maxIt,1);
+objValY = zeros(maxIt,1);
 
 % First pass
 y(:,1) = randn(dim,1);
 y(:,1) = y(:,1)/norm(y(:,1),2);
-for i = 2:maxIt+1
+objValY(1) = f(y(:,1));
+for i = 2:maxIt
     y(:,i) = y(:,i-1) - 1/L*gradf(y(:,i-1));
     tmp = norm(y(:,i));
     if tmp > 1
@@ -97,7 +89,8 @@ soluY = y(:,end);
 
 % Second pass
 x(:,1) = zeros(dim,1);
-for i = 2:maxIt+1
+objValX(1) = f(x(:,1));
+for i = 2:maxIt
     x(:,i) = x(:,i-1) - 1/L*gradf(x(:,i-1));
     tmp = norm(x(:,i));
     if tmp > 1
@@ -108,7 +101,7 @@ end
 soluX = x(:,end);
 
 % Store useful objects in structure
-bec.obj = f;
+beck.obj = f;
 beck.gradObj = gradf;
 beck.objValX = objValX;
 beck.objValY = objValY;
@@ -124,17 +117,20 @@ else
     beck.optVal = f(soluY);
 end
 
-%% TRS via STochastic Gradient Descent
-maxIt = 5000;
-miniBatchSize = floor(dim/4);
+%% TRS via Stochastic Gradient Descent
+maxIt = defaultField(sgdParam,'maxIt',100);
+miniBatchProp = defaultField(sgdParam,'miniBatchProp',0.2);
+miniBatchSize = ceil(dim*miniBatchProp);
 
-x = zeros(dim,maxIt+1);
-objVal = zeros(maxIt+1,1);
+
+x = zeros(dim,maxIt);
+objVal = zeros(maxIt,1);
 
 x(:,1) = randn(dim,1);
 x(:,1) = x(:,1)/norm(x(:,1),2);
+objVal(1) = f(x(:,1));
 
-for i = 2:maxIt+1
+for i = 2:maxIt
     %Compute partial gradient
     miniBatchInd = randi(dim,miniBatchSize,1);
     partialGrad = b;
@@ -157,4 +153,4 @@ sgd.gradObj = gradf;
 sgd.objVal = objVal;
 sgd.x = x;
 sgd.solu = solu;
-sgd.optVal = optVal;
+sgd.optVal = f(solu);
