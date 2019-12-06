@@ -19,7 +19,6 @@ for i = 1:length(dist)
     end
 end
 surf(dist,dist,mesh)
-save('visualization.mat', 'mesh') 
 
 %% Single Trial Run
 clear
@@ -56,4 +55,3 @@ legend('Starting at 0','Starting at random point','location','best')
 subplot(2,2,3)
 plot(1:sgdParam.maxIt,sgd.objVal)
 title('TRS Using Stochastic Projected Gradient Descent')
-save('iterationComparison','convex','beck','sgd','sdp')
