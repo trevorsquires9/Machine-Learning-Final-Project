@@ -33,7 +33,8 @@ for j = 1:trials
 end
 relError = abs(optVals(:,1)-optVals(:,3))./abs(optVals(:,1));
 worstErr = max(relError);
-save('errorAnalysis','relError','worstErr')
+averageErr = mean(relError);
+save('errorAnalysis','relError','worstErr','averageErr')
 
 %% Large Dimension Run
 clear
