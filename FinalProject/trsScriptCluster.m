@@ -33,7 +33,7 @@ for j = 1:trials
 end
 relError = abs(optVals(:,1)-optVals(:,3))./abs(optVals(:,1));
 worstErr = max(relError);
-save('ErrorAnalysis','relError','worstErr')
+save('errorAnalysis','relError','worstErr')
 
 %% Large Dimension Run
 clear
@@ -58,4 +58,4 @@ for i = 1:length(dim)
     [convex, beck, sgd, sdp] = solvingTRS(A,b,dim(i),convexParam,beckParam,sgdParam,sdpParam);
     timings(i,:) = [convex.time, beck.time,sgd.time,sdp.time];
 end
-save('Timings','timings')
+save('timings','timings')
