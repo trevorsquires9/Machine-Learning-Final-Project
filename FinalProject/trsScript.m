@@ -2,6 +2,13 @@ clear
 clc
 close all;
 
+cd LinuxCVX
+cd cvx
+cvx_setup
+cd ..
+cd ..
+
+
 %% Visualizing nonconvexity
 dim = 2;
 A = diag([-5 5]);
@@ -70,7 +77,7 @@ beckParam.maxIt = it;
 sgdParam.epochs = it;
 sgdParam.miniBatchProp = 1/4;
 sgdParam.maxIt = ceil(sgdParam.epochs/sgdParam.miniBatchProp);
-trials = 1000;
+trials = 50000;
 
 % Algorithm Instances
 optVals = zeros(trials,3);
