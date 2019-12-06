@@ -17,13 +17,8 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [conRef,beck,sgd] = solvingTRS(dim,conParam,beckParam,sgdParam)
+function [conRef,beck,sgd,sdp] = solvingTRS(A,b,dim,conParam,beckParam,sgdParam,sdpParam)
 %% Problem setting
-
-% Matrix/Vector Generation
-A = rand(dim);
-A = A+A';
-b = zeros(dim,1);%randn(dim,1);
 
 % Instance parameters
 eigMin = min(eig(A));
@@ -37,6 +32,7 @@ gradg = @(x) gradf(x) + eigMin*x;
 
 
 %% TRS via convex reformulation
+tic;
 maxIt = defaultField(conParam,'maxIt',100);
 x = zeros(dim,maxIt);
 objVal = zeros(maxIt,1);
@@ -59,14 +55,14 @@ solu = x(:,end);
 optVal = f(solu);
 
 % Store useful variables in a structure
-conRef.obj = g;
-conRef.gradObj = gradg;
+conRef.time = toc;
 conRef.objVal = objVal;
 conRef.x = x;
 conRef.solu = solu;
 conRef.optVal = optVal;
 
 %% TRS via Beck paper
+tic;
 maxIt = defaultField(beckParam,'maxIt',100);
 x = zeros(dim,maxIt);
 y = zeros(dim,maxIt);
@@ -101,12 +97,11 @@ end
 soluX = x(:,end);
 
 % Store useful objects in structure
-beck.obj = f;
-beck.gradObj = gradf;
+beck.time = toc;
 beck.objValX = objValX;
 beck.objValY = objValY;
 
-% Pick best solution 
+% Pick best solution
 if f(soluX)<f(soluY)
     beck.x = x;
     beck.solu = soluX;
@@ -118,6 +113,7 @@ else
 end
 
 %% TRS via Stochastic Gradient Descent
+tic;
 maxIt = defaultField(sgdParam,'maxIt',100);
 miniBatchProp = defaultField(sgdParam,'miniBatchProp',0.2);
 miniBatchSize = ceil(dim*miniBatchProp);
@@ -148,9 +144,31 @@ end
 solu = x(:,end);
 
 % Store useful objects in structures
-sgd.obj = f;
-sgd.gradObj = gradf;
+sgd.time = toc;
 sgd.objVal = objVal;
 sgd.x = x;
 sgd.solu = solu;
-sgd.optVal = f(solu);
+sgd.optVal = min(objVal);
+
+%% TRS via Semidefinite Reformulation
+run = defaultField(sdpParam,'run',0);
+if run
+    tic;
+    A = 0.5*A;
+    C = [0 0.5*b'; 0.5*b A];
+    Q1 = [0 zeros(1,dim); zeros(dim,1) eye(dim)];
+    Q2 = [1 zeros(1,dim); zeros(dim,1) zeros(dim)];
+    
+    cvx_begin sdp quiet
+    variable T(dim+1,dim+1) semidefinite symmetric
+    minimize(trace(C*T))
+    subject to
+    trace(Q1*T) == 1
+    trace(Q2*T) == 1
+    cvx_end
+    sdp.time = toc;
+    sdp.solu = T(2:end,1);
+    sdp.optVal = cvx_optval;
+else
+    sdp = [];
+end
