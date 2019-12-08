@@ -18,7 +18,9 @@ for i = 1:length(dist)
         mesh(i,j) = f(x);
     end
 end
+
 surf(dist,dist,mesh)
+
 
 %% Single Trial Run
 clear

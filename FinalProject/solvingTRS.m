@@ -23,6 +23,7 @@ function [conRef,beck,sgd,sdp] = solvingTRS(A,b,dim,conParam,beckParam,sgdParam,
 % Instance parameters
 eigMin = min(eig(A));
 L = norm(A,2);
+fixedL = norm(A-eigMin*eye(dim),2);
 
 % Function Setup
 f = @(x) 0.5*x'*A*x + b'*x;
@@ -41,7 +42,7 @@ x(:,1) = randn(dim,1);
 x(:,1) = x(:,1)/norm(x(:,1),2);
 
 for i = 2:maxIt
-    x(:,i) = x(:,i-1) - 1/(L+eigMin)*gradg(x(:,i-1));
+    x(:,i) = x(:,i-1) - 1/(fixedL)*gradg(x(:,i-1));
     tmp = norm(x(:,i));
     if tmp > 1
         x(:,i) = x(:,i)/tmp;
@@ -134,7 +135,7 @@ for i = 2:maxIt
         partialGrad = partialGrad + A(:,miniBatchInd(j))*x(miniBatchInd(j),i-1);
     end
     %Update using partial gradient
-    x(:,i) = x(:,i-1) - 1/(L+eigMin)*partialGrad;
+    x(:,i) = x(:,i-1) - 1/(L)*partialGrad;
     tmp = norm(x(:,i));
     if tmp > 1
         x(:,i) = x(:,i)/tmp;
