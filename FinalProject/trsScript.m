@@ -4,10 +4,10 @@ close all;
 
 %% Visualizing nonconvexity
 dim = 2;
-A = diag([-5 5]);
+A = diag([0 5]);
 [q,~] = qr(randn(dim));
 A = q'*A*q;
-b = zeros(dim,1);
+b = rand(dim,1);
 
 f = @(x) 0.5*x'*A*x+b'*x;
 dist = linspace(-1,1,100);
@@ -28,7 +28,7 @@ clc
 
 % Algorithm Parameters
 it = 100;
-dim = 35;
+dim = 5;
 convexParam.maxIt = it;
 beckParam.maxIt = it;
 sgdParam.epochs = it;
@@ -38,6 +38,7 @@ sgdParam.maxIt = ceil(sgdParam.epochs/sgdParam.miniBatchProp);
 A = rand(dim);
 A = A+A';
 b = rand(dim,1);
+
 
 [convex, beck, sgd,sdp] = solvingTRS(A,b,dim,convexParam,beckParam,sgdParam,[]);
 
