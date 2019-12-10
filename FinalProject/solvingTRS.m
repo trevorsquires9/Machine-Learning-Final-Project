@@ -40,6 +40,7 @@ objVal = zeros(maxIt,1);
 
 x(:,1) = randn(dim,1);
 x(:,1) = x(:,1)/norm(x(:,1),2);
+objVal(1) = f(x(:,1));
 
 for i = 2:maxIt
     x(:,i) = x(:,i-1) - 1/(fixedL)*gradg(x(:,i-1));
