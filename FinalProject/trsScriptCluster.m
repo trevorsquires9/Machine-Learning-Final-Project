@@ -31,7 +31,7 @@ for j = 1:trials
     b = zeros(dim,1);
     [convex, beck, sgd] = solvingTRS(A,b,dim,convexParam,beckParam,sgdParam,[]);
     optVals(j,:) = [convex.optVal,beck.optVal,sgd.optVal];
-    if norm(convex.solu,2) < 1
+    if abs(1-norm(convex.solu,2)) > eps
         failedRelaxation = failedRelaxation+1;
     end
 end
