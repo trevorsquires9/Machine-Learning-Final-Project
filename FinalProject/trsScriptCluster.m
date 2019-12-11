@@ -18,8 +18,9 @@ dim = 35;
 convexParam.maxIt = it;
 beckParam.maxIt = it;
 sgdParam.epochs = it;
-sgdParam.miniBatchProp = 1/4;
+sgdParam.miniBatchProp = 0.1;
 sgdParam.maxIt = ceil(sgdParam.epochs/sgdParam.miniBatchProp);
+sdpParam.run = 1;
 trials = 50000;
 failedRelaxation = 0;
 
@@ -29,18 +30,16 @@ for j = 1:trials
     A = rand(dim);
     A = A+A';
     b = rand(dim,1);
-    [convex, beck, sgd] = solvingTRS(A,b,dim,convexParam,beckParam,sgdParam,[]);
+    [convex, beck, sgd] = solvingTRS(A,b,dim,convexParam,beckParam,sgdParam,sdpParam);
     optVals(j,:) = [convex.optVal,beck.objValX(end),beck.objValY(end),sgd.optVal];
     if abs(1-norm(convex.solu,2)) > eps
         failedRelaxation = failedRelaxation+1;
     end
 end
-relError = abs(optVals(:,1)-optVals(:,3))./abs(optVals(:,1));
-worstErr = max(relError);
-averageErr = mean(relError);
+
 failedProp = failedRelaxation/trials;
 
-save('errorAnalysis','optVals','relError','worstErr','averageErr','failedProp')
+save('errorAnalysis','optVals','failedProp')
 
 %% Large Dimension Run
 clear
@@ -53,7 +52,7 @@ timings = zeros(length(dim),4);
 convexParam.maxIt = it;
 beckParam.maxIt = it;
 sgdParam.epochs = it;
-sgdParam.miniBatchProp = 1/4;
+sgdParam.miniBatchProp = 0.1;
 sgdParam.maxIt = ceil(sgdParam.epochs/sgdParam.miniBatchProp);
 sdpParam.run = 1;
  
@@ -65,4 +64,4 @@ for i = 1:length(dim)
     [convex, beck, sgd, sdp] = solvingTRS(A,b,dim(i),convexParam,beckParam,sgdParam,sdpParam);
     timings(i,:) = [convex.time, beck.time,sgd.time,sdp.time];
 end
-save('timings','timings')
+save('timings','timings','dim')

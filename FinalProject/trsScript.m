@@ -37,7 +37,7 @@ sgdParam.maxIt = ceil(sgdParam.epochs/sgdParam.miniBatchProp);
 
 A = rand(dim);
 A = A+A';
-b = zeros(dim,1);
+b = rand(dim,1);
 
 
 [convex, beck, sgd,sdp] = solvingTRS(A,b,dim,convexParam,beckParam,sgdParam,[]);
