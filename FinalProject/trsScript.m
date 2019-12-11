@@ -28,7 +28,7 @@ clc
 
 % Algorithm Parameters
 it = 100;
-dim = 5;
+dim = 35;
 convexParam.maxIt = it;
 beckParam.maxIt = it;
 sgdParam.epochs = it;
@@ -37,7 +37,7 @@ sgdParam.maxIt = ceil(sgdParam.epochs/sgdParam.miniBatchProp);
 
 A = rand(dim);
 A = A+A';
-b = rand(dim,1);
+b = zeros(dim,1);
 
 
 [convex, beck, sgd,sdp] = solvingTRS(A,b,dim,convexParam,beckParam,sgdParam,[]);
@@ -46,15 +46,21 @@ b = rand(dim,1);
 figure();
 subplot(2,2,1)
 plot(1:convexParam.maxIt,convex.objVal)
+xlabel('Iteration')
+ylabel('Objective')
 title('TRS Using Convex Reformulation')
 
 subplot(2,2,2)
 plot(1:beckParam.maxIt, beck.objValX)
 hold on
 plot(1:beckParam.maxIt, beck.objValY)
+xlabel('Iteration')
+ylabel('Objective')
 title('TRS Using Double-Start FOCM')
 legend('Starting at 0','Starting at random point','location','best')
 
 subplot(2,2,3)
 plot(1:sgdParam.maxIt,sgd.objVal)
+xlabel('Iteration')
+ylabel('Objective')
 title('TRS Using Stochastic Projected Gradient Descent')

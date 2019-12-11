@@ -20,17 +20,17 @@ beckParam.maxIt = it;
 sgdParam.epochs = it;
 sgdParam.miniBatchProp = 1/4;
 sgdParam.maxIt = ceil(sgdParam.epochs/sgdParam.miniBatchProp);
-trials = 50000;
+trials = 5;
 failedRelaxation = 0;
 
 % Algorithm Instances
-optVals = zeros(trials,3);
+optVals = zeros(trials,4);
 for j = 1:trials
     A = rand(dim);
     A = A+A';
-    b = zeros(dim,1);
+    b = rand(dim,1);
     [convex, beck, sgd] = solvingTRS(A,b,dim,convexParam,beckParam,sgdParam,[]);
-    optVals(j,:) = [convex.optVal,beck.optVal,sgd.optVal];
+    optVals(j,:) = [convex.optVal,beck.objValX(end),beck.objValY(end),sgd.optVal];
     if abs(1-norm(convex.solu,2)) > eps
         failedRelaxation = failedRelaxation+1;
     end

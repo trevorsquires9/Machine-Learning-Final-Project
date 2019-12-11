@@ -22,6 +22,7 @@ sgdParam.miniBatchProp = 1/4;
 sgdParam.maxIt = ceil(sgdParam.epochs/sgdParam.miniBatchProp);
 trials = 50000;
 failedRelaxation = 0;
+zeroBetter = 0;
 
 % Algorithm Instances
 optVals = zeros(trials,3);
@@ -31,9 +32,11 @@ for j = 1:trials
     b = zeros(dim,1);
     [convex, beck, sgd] = solvingTRS(A,b,dim,convexParam,beckParam,sgdParam,[]);
     optVals(j,:) = [convex.optVal,beck.optVal,sgd.optVal];
-    if abs(1-norm(convex.solu,2)) < 
+    if abs(1-norm(convex.solu,2)) > eps
         failedRelaxation = failedRelaxation+1;
     end
+    if abs(beck.objValX(end)-beck.objValY(end)) > eps
+        
 end
 relError = abs(optVals(:,1)-optVals(:,3))./abs(optVals(:,1));
 worstErr = max(relError);
