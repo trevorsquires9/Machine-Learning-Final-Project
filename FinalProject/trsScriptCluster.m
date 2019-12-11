@@ -20,7 +20,7 @@ beckParam.maxIt = it;
 sgdParam.epochs = it;
 sgdParam.miniBatchProp = 1/4;
 sgdParam.maxIt = ceil(sgdParam.epochs/sgdParam.miniBatchProp);
-trials = 5;
+trials = 50000;
 failedRelaxation = 0;
 
 % Algorithm Instances
