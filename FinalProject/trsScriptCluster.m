@@ -40,7 +40,7 @@ worstErr = max(relError);
 averageErr = mean(relError);
 failedProp = failedRelaxation/trials;
 
-save('errorAnalysis','relError','worstErr','averageErr','failedProp')
+save('errorAnalysis','optVals','relError','worstErr','averageErr','failedProp')
 
 %% Large Dimension Run
 clear
